@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using AoC19.Day01;
+using System.Diagnostics;
 
 namespace AoC19
 {
@@ -8,7 +9,7 @@ namespace AoC19
         {
             int day = 1;
             int part = 1;
-            bool test = !false;
+            bool test = false;
 
             string input = "./Input/day" + day.ToString("00");
             input += (test) ? "_test.txt" : ".txt";
@@ -29,7 +30,10 @@ namespace AoC19
         static string day1(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            return "";
+            RocketEquation eq = new();
+            eq.ParseInput(lines);
+
+            return eq.Solve(part).ToString();
         }
 
     }
