@@ -10,7 +10,11 @@
         int Module(int mass)
             => (mass / 3) - 2;
 
+        int ModuleEx(int mass)
+            => Module(mass) > 0 ? Module(mass) + ModuleEx(Module(mass)) : 0;
+
         public int Solve(int part = 1)
-            => part == 1 ? masses.Select(x => Module(x)).Sum() : 0;
+            => part == 1 ? masses.Select(x => Module(x)).Sum()
+                         : masses.Select(x => ModuleEx(x)).Sum();
     }
 }
