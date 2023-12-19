@@ -9,7 +9,7 @@ namespace AoC19
         {
             int day = 2;
             int part = 1;
-            bool test = !false;
+            bool test = false;
 
             string input = "./Input/day" + day.ToString("00");
             input += (test) ? "_test.txt" : ".txt";
@@ -39,7 +39,9 @@ namespace AoC19
         static string day2(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            return "";
+            Day02.GravityAssist assist = new();
+            assist.ParseInput(lines);
+            return assist.Solve(part).ToString();
         }
 
     }
