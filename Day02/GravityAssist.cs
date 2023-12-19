@@ -26,10 +26,10 @@
             return true;
         }
 
-        int RunProgram()
+        int RunProgram(int noun, int verb)
         {
-            IntCodes[1] = 12;
-            IntCodes[2] = 2;
+            IntCodes[1] = noun;
+            IntCodes[2] = verb;
 
             int Ptr = 0;
             while (IntCodes.Keys.Contains(Ptr))
@@ -39,7 +39,26 @@
             return IntCodes[0];
         }
 
+        int FindNounAndVerb()
+        {
+            int noun = 0;
+            int verb = 0;
+            List<int> backup = new List<int>(IntCodes.Values);
+
+            for (noun = 0; noun <= 99; noun++)
+                for (verb = 0; verb <= 99; verb++)
+                {
+                    // Idempotence
+                    for (int i = 0; i < backup.Count; i++)
+                        IntCodes[i] = backup[i];
+
+                    if (RunProgram(noun, verb) == 19690720)
+                        return noun * 100 + verb;
+                }
+            return -1;
+        }
+
         public int Solve(int part)
-            => RunProgram();
+            => part == 1 ? RunProgram(12, 2) : FindNounAndVerb();
     }
 }
