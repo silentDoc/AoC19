@@ -1,5 +1,4 @@
 ﻿using AoC19.Common;
-using System.Runtime.ConstrainedExecution;
 
 namespace AoC19.Day03
 {
@@ -53,18 +52,13 @@ namespace AoC19.Day03
             => lines.ForEach(ParseLine);
 
         int DistToOrigin()
-           => Cells.Keys.Where(x => Cells[x] > 1).Select(x => new Coord2D(0, 0).Manhattan(x)).Min();
+           => Cells.Keys.Where(x => Cells[x] > 1).Min(x => new Coord2D(0, 0).Manhattan(x));
 
         int MinSteps()
-        {
-            var crossings = Cells.Keys.Where(x => Cells[x] > 1);
-            var w1Steps = crossings.Select(x => Wire1.IndexOf(x) + 1).ToList();
-            var w2Steps = crossings.Select(x => Wire2.IndexOf(x) + 1).ToList();
-            // There are crossings done by only 1 wire, we need to ignore positions of multiple
-            var dists = w1Steps.Zip(w2Steps, (f, s) => (f!=0 && s!=0) ? f + s : 999999).ToList();
-            return dists.Min();
-        }
-
+            =>  Cells.Keys.Where(x => Cells[x] > 1)
+                          .Intersect(Wire1)
+                          .Intersect(Wire2)
+                          .Min(x => Wire1.IndexOf(x) + Wire2.IndexOf(x) + 2);  // Index +1 (zero based) for both wires -- +2
         public int Solve(int part)
             => part ==1 ? DistToOrigin() : MinSteps();
     }
