@@ -7,9 +7,9 @@ namespace AoC19
     {
         static void Main(string[] args)
         {
-            int day = 3;
-            int part = 2;
-            bool test = false;
+            int day = 4;
+            int part = 1;
+            bool test = !false;
 
             string input = "./Input/day" + day.ToString("00");
             input += (test) ? "_test.txt" : ".txt";
@@ -22,6 +22,7 @@ namespace AoC19
                 1 => day1(input, part),
                 2 => day2(input, part),
                 3 => day3(input, part),
+                4 => day4(input, part),
                 _ => throw new ArgumentException("Wrong day number - unimplemented")
             };
             st.Stop();
@@ -52,6 +53,16 @@ namespace AoC19
             wires.ParseInput(lines);
 
             return wires.Solve(part).ToString();
+        }
+
+        static string day4(string input, int part)
+        {
+            var lines = File.ReadAllLines(input).ToList();
+            //Day04.WireMap wires = new();
+            //wires.ParseInput(lines);
+
+            return "";
+            //wires.Solve(part).ToString();
         }
 
     }
