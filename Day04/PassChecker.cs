@@ -12,7 +12,7 @@
             end = vs[1];
         }
 
-        int FindCombinations()
+        int FindCombinations(int part = 1)
         {
             int count = 0;
             for(int v = start; v<= end; v++) 
@@ -22,13 +22,22 @@
                 var repeated = tuples.Any(x => x.f == x.s);
                 var incOrEqual = tuples.All(x => x.f >= x.s);
 
-                if (repeated && incOrEqual)
+                if (!(repeated && incOrEqual))
+                    continue;
+
+                if (part == 1)
                     count++;
+                else
+                {
+                    var repeats = str.ToCharArray().Distinct().Select(x => str.Count(c => c == x)).ToList();
+                    if (repeats.Any(x => x == 2))
+                        count++;
+                }
             }
             return count;
         }
 
         public int Solve(int part = 1)
-            => FindCombinations();
+            => FindCombinations(part);
     }
 }
