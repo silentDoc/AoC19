@@ -58,11 +58,11 @@ namespace AoC19
         static string day4(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            //Day04.WireMap wires = new();
-            //wires.ParseInput(lines);
+            Day04.PassChecker checker = new();
+            checker.ParseInput(lines);
 
-            return "";
-            //wires.Solve(part).ToString();
+            
+            return checker.Solve(part).ToString();
         }
 
     }
