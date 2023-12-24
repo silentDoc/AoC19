@@ -1,5 +1,4 @@
-﻿using AoC19.Day01;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace AoC19
 {
@@ -7,8 +6,8 @@ namespace AoC19
     {
         static void Main(string[] args)
         {
-            int day = 4;
-            int part = 2;
+            int day = 5;
+            int part = 1;
             bool test = !false;
 
             string input = "./Input/day" + day.ToString("00");
@@ -23,6 +22,7 @@ namespace AoC19
                 2 => day2(input, part),
                 3 => day3(input, part),
                 4 => day4(input, part),
+                5 => day5(input, part),
                 _ => throw new ArgumentException("Wrong day number - unimplemented")
             };
             st.Stop();
@@ -33,7 +33,7 @@ namespace AoC19
         static string day1(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            RocketEquation eq = new();
+            Day01.RocketEquation eq = new();
             eq.ParseInput(lines);
             return eq.Solve(part).ToString();
         }
@@ -60,9 +60,13 @@ namespace AoC19
             var lines = File.ReadAllLines(input).ToList();
             Day04.PassChecker checker = new();
             checker.ParseInput(lines);
-
-            
             return checker.Solve(part).ToString();
+        }
+
+        static string day5(string input, int part)
+        {
+            var lines = File.ReadAllLines(input).ToList();
+            return "";
         }
 
     }
