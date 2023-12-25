@@ -25,18 +25,17 @@
                 return EXIT_PROGRAM;
 
             int v1 = IntCodes[Ptr + 1];
-            int v2 = opCode < 3 || opCode > 4 ? IntCodes[Ptr + 2] : 0;  // Just in case, we don't want to step off bounds
-            int v3 = opCode < 3 || opCode > 6 ? IntCodes[Ptr + 3] : 0;
+            int v2 = opCode < 3 || opCode > 4 ? IntCodes[Ptr + 2] : EXIT_PROGRAM;  // Just in case, we don't want to step off bounds
+            int v3 = opCode < 3 || opCode > 6 ? IntCodes[Ptr + 3] : EXIT_PROGRAM;  // EXIT_PROGRAM just to have an identifiable value
 
             var op1 = p1Mode == 0 ? IntCodes[v1] : v1;
-            int op2;
+            int op2 = v2 != EXIT_PROGRAM ? (p2Mode == 0 ? IntCodes[v2] : v2) : EXIT_PROGRAM;
 
             var increment = 4;
             switch (opCode)
             {
                 case 1:     // Sum / mul
                 case 2:
-                    op2 = p2Mode == 0 ? IntCodes[v2] : v2;
                     IntCodes[v3] = opCode == 1 ? op1 + op2 : op1 * op2;
                     break;
                 case 3:     // Input
@@ -47,31 +46,20 @@
                     LastOutput = op1;
                     increment = 2;
                     break;
-                case 5:     // Jump if true - first param is non zero - we set the IntPtr to second param
-                    if (op1 != 0)
+                case 5:
+                case 6:    // Jumps
+                    var cond_jz_jnz = opCode == 5 ? (op1 != 0) : (op1 == 0);
+                    if (cond_jz_jnz)
                     {
-                        op2 = p2Mode == 0 ? IntCodes[v2] : v2;
                         increment = op2 - Ptr;
                     }
                     else
                         increment = 3;
                     break;
-                case 6:     // Jump if false - first param is zero - we set the IntPtr to second param
-                    if (op1 == 0)
-                    {
-                        op2 = p2Mode == 0 ? IntCodes[v2] : v2;
-                        increment = op2 - Ptr;
-                    }
-                    else
-                        increment = 3;
-                    break;
-                case 7:     // Less than - first < second -- code[third] = 1 else 0
-                    op2 = p2Mode == 0 ? IntCodes[v2] : v2;
-                    IntCodes[v3] = (op1 < op2) ? 1 : 0;
-                    break;
-                case 8:     // Equals - - first == second -- code[third] = 1 else 0
-                    op2 = p2Mode == 0 ? IntCodes[v2] : v2;
-                    IntCodes[v3] = (op1 == op2) ? 1 : 0;
+                case 7:     
+                case 8:    // Less than - Equals
+                    var cond_lt_eq = opCode == 7 ? (op1 < op2) : (op1 == op2);
+                    IntCodes[v3] = cond_lt_eq ? 1 : 0;
                     break;
             }
             return increment;
