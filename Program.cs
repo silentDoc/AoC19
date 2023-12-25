@@ -8,7 +8,7 @@ namespace AoC19
         {
             int day = 5;
             int part = 1;
-            bool test = !false;
+            bool test = false;
 
             string input = "./Input/day" + day.ToString("00");
             input += (test) ? "_test.txt" : ".txt";
@@ -66,7 +66,9 @@ namespace AoC19
         static string day5(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            return "";
+            Day05.TestTerm term = new();
+            term.ParseInput(lines);
+            return term.Solve(part).ToString();
         }
 
     }
