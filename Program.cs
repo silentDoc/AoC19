@@ -6,7 +6,7 @@ namespace AoC19
     {
         static void Main(string[] args)
         {
-            int day = 6
+            int day = 6;
             int part = 1;
             bool test = false;
 
@@ -75,7 +75,9 @@ namespace AoC19
         static string day6(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            return "";
+            Day06.OrbitCounter counter = new();
+            counter.ParseInput(lines);
+            return counter.Solve(part).ToString();
         }
 
     }
