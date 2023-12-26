@@ -6,9 +6,9 @@ namespace AoC19
     {
         static void Main(string[] args)
         {
-            int day = 6;
-            int part = 2;
-            bool test = false;
+            int day = 7;
+            int part = 1;
+            bool test = !false;
 
             string input = "./Input/day" + day.ToString("00");
             input += (test) ? "_test.txt" : ".txt";
@@ -24,6 +24,7 @@ namespace AoC19
                 4 => day4(input, part),
                 5 => day5(input, part),
                 6 => day6(input, part),
+                7 => day7(input, part),
                 _ => throw new ArgumentException("Wrong day number - unimplemented")
             };
             st.Stop();
@@ -78,6 +79,12 @@ namespace AoC19
             Day06.OrbitCounter counter = new();
             counter.ParseInput(lines);
             return counter.Solve(part).ToString();
+        }
+
+        static string day7(string input, int part)
+        {
+            var lines = File.ReadAllLines(input).ToList();
+            return "";
         }
 
     }
