@@ -26,7 +26,29 @@
             allSatellites["COM"] = new Satellite() { Parent = "", level =0};
         }
 
+        private int OrbitalTransfers()
+        {
+            var curr = allSatellites["YOU"].Parent;
+            List<string> journey1 = new();
+            List<string> journey2 = new();
+
+            while (curr != "COM")
+            {
+                curr = allSatellites[curr].Parent;
+                journey1.Add(curr);
+            }
+
+            curr = allSatellites["SAN"].Parent;
+            while (curr != "COM")
+            {
+                curr = allSatellites[curr].Parent;
+                journey2.Add(curr);
+            }
+
+            return journey1.Count + journey2.Count - 2 * journey1.Intersect(journey2).Count() +2;
+        }
+
         public int Solve(int part = 1)
-            => part == 1 ? allSatellites.Values.Sum(x => x.Level(allSatellites)) : 0;
+            => part == 1 ? allSatellites.Values.Sum(x => x.Level(allSatellites)) : OrbitalTransfers();
     }
 }
