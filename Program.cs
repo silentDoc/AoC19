@@ -8,7 +8,7 @@ namespace AoC19
         {
             int day = 8;
             int part = 1;
-            bool test = true;
+            bool test = false;
 
             string input = "./Input/day" + day.ToString("00");
             input += (test) ? "_test.txt" : ".txt";
@@ -94,7 +94,10 @@ namespace AoC19
         static string day8(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            return "";
+            Day08.ImageFormatAnalyzer img = new();
+            img.ParseInput(lines);
+
+            return img.Solve().ToString();
         }
 
     }
