@@ -49,12 +49,7 @@
                 case 5:
                 case 6:    // Jumps
                     var cond_jz_jnz = opCode == 5 ? (op1 != 0) : (op1 == 0);
-                    if (cond_jz_jnz)
-                    {
-                        increment = op2 - Ptr;
-                    }
-                    else
-                        increment = 3;
+                    increment = cond_jz_jnz ? op2 - Ptr : 3;
                     break;
                 case 7:     
                 case 8:    // Less than - Equals
