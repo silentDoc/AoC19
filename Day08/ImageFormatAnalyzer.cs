@@ -26,8 +26,9 @@
                 image.Add(layers.Select(layer => layer[pos]).First(x => x != 2));
 
             var lines = image.Chunk(wide).ToList();
-
-            lines.ForEach( line => Console.WriteLine( string.Concat( line.Select( x => (x==1 ? "O" : ".")))));
+            Console.WriteLine("");
+            lines.ForEach( line => Console.WriteLine( string.Concat( line.Select( x => (x==1 ? "*" : " ")))));
+            Console.WriteLine("");
             return 0;
         }
 
