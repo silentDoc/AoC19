@@ -19,7 +19,19 @@
             return layers[index].Count(x => x == 1) * layers[index].Count(x => x == 2);
         }
 
+        int SolvePart2()
+        {
+            List<int> image = new();
+            for (int pos = 0; pos < wide * tall; pos++)
+                image.Add(layers.Select(layer => layer[pos]).First(x => x != 2));
+
+            var lines = image.Chunk(wide).ToList();
+
+            lines.ForEach( line => Console.WriteLine( string.Concat( line.Select( x => (x==1 ? "O" : ".")))));
+            return 0;
+        }
+
         public int Solve(int part = 1)
-            => SolvePart1();
+            => part ==1 ? SolvePart1() : SolvePart2();
     }
 }

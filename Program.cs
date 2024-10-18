@@ -7,7 +7,7 @@ namespace AoC19
         static void Main(string[] args)
         {
             int day = 8;
-            int part = 1;
+            int part = 2;
             bool test = false;
 
             string input = "./Input/day" + day.ToString("00");
@@ -97,7 +97,7 @@ namespace AoC19
             Day08.ImageFormatAnalyzer img = new();
             img.ParseInput(lines);
 
-            return img.Solve().ToString();
+            return img.Solve(part).ToString();
         }
 
     }
