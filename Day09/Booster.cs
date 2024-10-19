@@ -156,16 +156,15 @@
         public void ParseInput(List<string> lines)
             => sourceCode = lines;
 
-        long FindBoostByteCode()
+        long FindBoostByteCode(int part = 1)
         {
-            BoostTerm term = new(1); // The BOOST program will ask for a single input; run it in test mode by providing it the value 1
+            BoostTerm term = new(part == 1 ? 1 : 2); 
             term.ParseInput(sourceCode);
             term.RunProgram();
             return term.LastOutput;
         }
 
         public long Solve(int part = 1)
-            => FindBoostByteCode();
-
+            => FindBoostByteCode(part);
     }
 }
