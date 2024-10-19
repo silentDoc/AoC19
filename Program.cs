@@ -104,8 +104,10 @@ namespace AoC19
         static string day9(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
+            Day09.Booster booster = new();
+            booster.ParseInput(lines);
 
-            return "";
+            return booster.Solve(part).ToString();
         }
 
     }
