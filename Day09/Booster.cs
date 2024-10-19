@@ -1,12 +1,5 @@
 ﻿namespace AoC19.Day09
 {
-    public enum TermState
-    {
-        RUNNING = 0,
-        WAITING = 1,
-        HALTED = 2
-    }
-
     public static class Instructions
     {
         public const long Sum = 1;
@@ -29,15 +22,10 @@
 
         long Ptr = 0;    // Instruction pointer
         long phase = 0;
-        bool phaseSet = false;
 
         public long LastOutput  = 0;
         const long EXIT_PROGRAM = long.MinValue;
-        const long NO_INPUT     = long.MinValue + 1;
         const long UNUSED_PARAM = long.MinValue + 2;
-
-        public Queue<int> inputBuffer = new Queue<int>();
-        public TermState State = TermState.RUNNING;
 
         long RelativeBase = 0;
 
@@ -102,8 +90,7 @@
                     IntCodes[op3] = opCode == Instructions.Sum ? op1 + op2 : op1 * op2;
                     break;
                 case Instructions.Input:
-                    IntCodes[op1] = (!phaseSet) ? phase : inputBuffer.Dequeue();
-                    phaseSet = true;
+                    IntCodes[op1] = phase;
                     increment = 2;
                     break;
                 case Instructions.Output:
@@ -131,19 +118,12 @@
 
         public long RunProgram()
         {
-            int i = 0;
-
             while (IntCodes.Keys.Contains(Ptr))
             {
-                State = TermState.RUNNING;
                 var increment = RunOpCode(Ptr);
-                if (increment == EXIT_PROGRAM || increment == NO_INPUT)
-                {
-                    State = (increment == NO_INPUT) ? TermState.WAITING : TermState.HALTED;
+                if (increment == EXIT_PROGRAM)
                     break;
-                }
                 Ptr += increment;
-                i++;
             }
             return LastOutput;
         }
