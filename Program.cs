@@ -6,9 +6,9 @@ namespace AoC19
     {
         static void Main(string[] args)
         {
-            int day = 11;
-            int part = 2;
-            bool test = false;
+            int day = 12;
+            int part = 1;
+            bool test = !false;
 
             string input = "./Input/day" + day.ToString("00");
             input += (test) ? "_test.txt" : ".txt";
@@ -29,6 +29,7 @@ namespace AoC19
                 9  => day9(input, part),
                 10 => day10(input, part),
                 11 => day11(input, part),
+                12 => day12(input, part),
                 _ => throw new ArgumentException("Wrong day number - unimplemented")
             };
             st.Stop();
@@ -127,6 +128,12 @@ namespace AoC19
             Day11.Painter painter = new();
             painter.ParseInput(lines);
             return painter.Solve(part).ToString();
+        }
+
+        static string day12(string input, int part)
+        {
+            var lines = File.ReadAllLines(input).ToList();
+            return "";
         }
     }
 }
