@@ -8,7 +8,7 @@ namespace AoC19
         {
             int day = 10;
             int part = 1;
-            bool test = !false;
+            bool test = false;
 
             string input = "./Input/day" + day.ToString("00");
             input += (test) ? "_test.txt" : ".txt";
@@ -114,8 +114,10 @@ namespace AoC19
         static string day10(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
+            Day10.StationLocator locator = new();
+            locator.ParseInput(lines);
 
-            return "";
+            return locator.Solve(part).ToString();
         }
 
     }
