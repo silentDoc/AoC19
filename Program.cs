@@ -1,5 +1,4 @@
-﻿using AoC19.Day11;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace AoC19
 {
@@ -8,7 +7,7 @@ namespace AoC19
         static void Main(string[] args)
         {
             int day = 12;
-            int part = 1;
+            int part = 2;
             bool test = false;
 
             string input = "./Input/day" + day.ToString("00");
