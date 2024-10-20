@@ -1,4 +1,5 @@
 ﻿using AoC19.Common;
+using System.Net.Security;
 
 namespace AoC19.Day10
 {
@@ -20,24 +21,29 @@ namespace AoC19.Day10
 
     internal class Asteroid
     {
-        Coord2D Position        = new(0, 0);
-        Coord2D StationPosition = new(0, 0);
-
+        public Coord2D Position        = new(0, 0);
+        public Coord2D StationPosition = new(0, 0);
         Coord2D normalizedPosition = new(0, 0);
+
+        double angle = -999999;         // Memoization
+        double distance = -999999;
 
         public Asteroid(Coord2D pos, Coord2D stationPos)
         {
             Position = pos;
             StationPosition = stationPos;
 
-            normalizedPosition = pos - stationPos;
+            normalizedPosition = pos - stationPos;  // Make our station our 0,0
         }
 
         public double Angle
-            => normalizedPosition.GetAngle();
+            => (angle == -999999) ? angle = normalizedPosition.GetAngle() : angle;
 
-        public double Dist
-            => normalizedPosition.VectorModule;
+        public double Distance
+            => (distance == -999999) ? distance = normalizedPosition.VectorModule : distance;
+
+        public override string ToString()
+            => "Position = (" + Position.ToString() + ") , Angle = " + Angle.ToString() + " , Distance = " + Distance.ToString();
     }
 
     internal class StationLocator
@@ -72,7 +78,7 @@ namespace AoC19.Day10
             }
             var maxSeen = seen.Max();
             var index = seen.IndexOf(maxSeen);
-            stationLocation = asteroids[index];
+            stationLocation = asteroids[index]; // For part 2
             
             return maxSeen;
         }
@@ -82,45 +88,41 @@ namespace AoC19.Day10
             FindBestLocation();
             // now stationLocation holds the location of the laser
             var others = asteroids.Where(x => x != stationLocation).ToList();
-            others.ForEach(x => x -= stationLocation);
-            
-            var remaining = new List<Coord2D>();
-            others.ForEach(x => remaining.Add(x));
-            Coord2D vaporized = new Coord2D(-1, -1);
 
-            bool mustSort = true;
-            
-            Console.WriteLine("Station Location = " + stationLocation.ToString());
+            // For part 2 I created an Asteroid class to help with normalization, angles and distances
+            List<Asteroid> asteroidList = new List<Asteroid>();
+            others.ForEach(x => asteroidList.Add(new Asteroid(x, stationLocation)));
+            asteroidList = asteroidList.OrderBy(x => x.Angle)
+                                       .ThenBy(x => x.Distance)
+                                       .ToList();
+
+            List<Asteroid> asteroidList_interest = new List<Asteroid>();
+            asteroidList.ForEach(asteroidList_interest.Add);
+
+            Asteroid vaporized = new(new(0, 0), stationLocation);
+
+            bool goneAround = false;
 
             // We have station location become our center of axis (all points relative to it) so that we can find the angles easily
             for (int i = 0; i < 200; i++)
             {
-
-                if (mustSort)
+                if (goneAround)
                 {
-                    others = others.OrderBy(x => x.GetAngle())
-                                   .ThenBy(x => x.VectorModule).ToList();
-                    mustSort = false;
+                    // If we do a full turn, we reset the list of interest with the remaining asteroids
+                    asteroidList.ForEach(asteroidList_interest.Add);
+                    goneAround = false;
                 }
                 
-                vaporized = others[0];
-                var currentAngle = vaporized.GetAngle();
+                vaporized = asteroidList_interest[0];  // Destroy the first -closest
+                asteroidList.Remove(vaporized);
+                // Consider only the ones that do not have the same angle of the vaporized
+                asteroidList_interest = asteroidList_interest.Where(x => x.Angle != vaporized.Angle).ToList();
 
-                Console.WriteLine("Order " + i.ToString() + " - Loc : " + (vaporized + stationLocation).ToString());
-
-                remaining.Remove(vaporized);
-                others = others.Where(x => x.GetAngle() != currentAngle).ToList();
-
-                if (others.Count == 0)
-                {
-                    remaining.ForEach(x => others.Add(x));
-                    mustSort = true;
-                }
+                if (asteroidList_interest.Count == 0)
+                    goneAround = true;
             }
             
-
-            vaporized += stationLocation;   // Restore the original coordinates
-            return vaporized.x * 100 + vaporized.y;
+            return vaporized.Position.x * 100 + vaporized.Position.y;
         }
 
         public int Solve(int part = 1)
