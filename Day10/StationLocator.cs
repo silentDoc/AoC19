@@ -1,5 +1,4 @@
 ﻿using AoC19.Common;
-using System.Net.Security;
 
 namespace AoC19.Day10
 {
@@ -32,8 +31,7 @@ namespace AoC19.Day10
         {
             Position = pos;
             StationPosition = stationPos;
-
-            normalizedPosition = pos - stationPos;  // Make our station our 0,0
+            normalizedPosition = pos - stationPos;  // Make the station our 0,0
         }
 
         public double Angle
@@ -41,9 +39,6 @@ namespace AoC19.Day10
 
         public double Distance
             => (distance == -999999) ? distance = normalizedPosition.VectorModule : distance;
-
-        public override string ToString()
-            => "Position = (" + Position.ToString() + ") , Angle = " + Angle.ToString() + " , Distance = " + Distance.ToString();
     }
 
     internal class StationLocator
@@ -76,17 +71,14 @@ namespace AoC19.Day10
                 var clearlySeen = others.Count(x => HowManyInLine(candidate, x) == 0);
                 seen.Add(clearlySeen);
             }
-            var maxSeen = seen.Max();
-            var index = seen.IndexOf(maxSeen);
-            stationLocation = asteroids[index]; // For part 2
-            
-            return maxSeen;
+            stationLocation = asteroids[seen.IndexOf(seen.Max())]; // For part 2
+            return seen.Max();
         }
 
         int Vaporize()
         {
-            FindBestLocation();
-            // now stationLocation holds the location of the laser
+            FindBestLocation();   // To retrieve the station location
+            
             var others = asteroids.Where(x => x != stationLocation).ToList();
 
             // For part 2 I created an Asteroid class to help with normalization, angles and distances
@@ -100,10 +92,8 @@ namespace AoC19.Day10
             asteroidList.ForEach(asteroidList_interest.Add);
 
             Asteroid vaporized = new(new(0, 0), stationLocation);
-
             bool goneAround = false;
 
-            // We have station location become our center of axis (all points relative to it) so that we can find the angles easily
             for (int i = 0; i < 200; i++)
             {
                 if (goneAround)
@@ -113,7 +103,7 @@ namespace AoC19.Day10
                     goneAround = false;
                 }
                 
-                vaporized = asteroidList_interest[0];  // Destroy the first -closest
+                vaporized = asteroidList_interest[0];  // Destroy the first one - the closest (thenby)
                 asteroidList.Remove(vaporized);
                 // Consider only the ones that do not have the same angle of the vaporized
                 asteroidList_interest = asteroidList_interest.Where(x => x.Angle != vaporized.Angle).ToList();
@@ -121,7 +111,6 @@ namespace AoC19.Day10
                 if (asteroidList_interest.Count == 0)
                     goneAround = true;
             }
-            
             return vaporized.Position.x * 100 + vaporized.Position.y;
         }
 
