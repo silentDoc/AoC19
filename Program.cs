@@ -6,8 +6,8 @@ namespace AoC19
     {
         static void Main(string[] args)
         {
-            int day = 12;
-            int part = 2;
+            int day = 13;
+            int part = 1;
             bool test = false;
 
             string input = "./Input/day" + day.ToString("00");
@@ -30,6 +30,7 @@ namespace AoC19
                 10 => day10(input, part),
                 11 => day11(input, part),
                 12 => day12(input, part),
+                13 => day13(input, part),
                 _ => throw new ArgumentException("Wrong day number - unimplemented")
             };
             st.Stop();
@@ -136,6 +137,12 @@ namespace AoC19
             Day12.MoonSystem moonsys = new();
             moonsys.ParseInput(lines);
             return moonsys.Solve(part).ToString();
+        }
+
+        static string day13(string input, int part)
+        {
+            var lines = File.ReadAllLines(input).ToList();
+            return "";
         }
     }
 }
