@@ -115,6 +115,20 @@
         public bool IsInside(Coord2D p0, Coord2D p1)
             => IsInside(p0.x, p0.y, p1.x, p1.y);
 
+
+        public double GetAngle()
+        {
+            var dirY = -1 * y;      // Up is down and viceversa
+            var dirX =  x;
+
+            double atan = Math.Atan2(dirY, dirX);
+            double angle = (((360 - ((RadianToDegree(atan) + 360) % 360)) % 360) + 90) % 360;
+            return angle;
+        }
+
+        private double RadianToDegree(double angle)
+            => angle * (180.0 / Math.PI);
+
         public override string ToString()
         {
             return x.ToString() + "," + y.ToString();
