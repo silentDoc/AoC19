@@ -103,6 +103,15 @@
             }
         }
 
+        public bool IsInside(int x0, int y0, int x1, int y1)
+            => x >= Math.Min(x0, x1) &&
+               x <= Math.Max(x0, x1) &&
+               y >= Math.Min(y0, y1) &&
+               y <= Math.Max(y0, y1);
+
+        public bool IsInside(Coord2D p0, Coord2D p1)
+            => IsInside(p0.x, p0.y, p1.x, p1.y);
+
         public override string ToString()
         {
             return x.ToString() + "," + y.ToString();
