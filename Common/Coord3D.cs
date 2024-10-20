@@ -85,7 +85,11 @@
                 return hash;
             }
         }
+        public override string ToString()
+        {
+            return x.ToString() + "," + y.ToString() + "," + z.ToString();
+        }
 
-        
+
     }
 }
