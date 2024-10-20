@@ -1,4 +1,5 @@
 ﻿using AoC19.Common;
+using System.Text;
 
 namespace AoC19.Day11
 {
@@ -171,8 +172,11 @@ namespace AoC19.Day11
             return increment;
         }
 
-        public long RunProgram()
+        public long RunProgram(int part = 1)
         {
+            if (part == 2)
+                PanelMap[(0, 0)] = 1;   // Start on a white panel
+
             while (IntCodes.Keys.Contains(Ptr))
             {
                 var increment = RunOpCode(Ptr);
@@ -181,6 +185,25 @@ namespace AoC19.Day11
                 Ptr += increment;
             }
             LastOutput = PaintedPositions.Count();
+            
+            if (part == 2)
+            {
+                // Draw the painting
+                var whitePositions = PanelMap.Keys.Where(x => PanelMap[x] == 1).ToList();
+                var min_x = whitePositions.Min(p => p.x);
+                var min_y = whitePositions.Min(p => p.y);
+                var max_x = whitePositions.Max(p => p.x);
+                var max_y = whitePositions.Max(p => p.y);
+
+                for (int row = min_y; row <= max_y; row++)
+                {
+                    StringBuilder sb = new("");
+                    for (int col = min_x; col <= max_x; col++)
+                        sb.Append(whitePositions.Contains((col, row)) ? "*" : " ");
+                    Console.WriteLine(sb.ToString());
+                }
+            }
+            
             return LastOutput;
         }
     }
@@ -196,7 +219,7 @@ namespace AoC19.Day11
         {
             PaintTerm term = new();
             term.ParseInput(sourceCode);
-            term.RunProgram();
+            term.RunProgram(part);
             return term.LastOutput;
         }
 

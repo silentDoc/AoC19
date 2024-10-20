@@ -77,3 +77,11 @@ The robot is now back where it started, but because it is now on a white panel, 
 Before you deploy the robot, you should probably have an estimate of the area it will cover: specifically, you need to know the  _number of panels it paints at least once_, regardless of color. In the example above, the robot painted  _`6`  panels_  at least once. (It painted its starting panel twice, but that panel is  [still only counted once](https://www.youtube.com/watch?v=KjsSvjA5TuE); it also never painted the panel it ended on.)
 
 Build a new emergency hull painting robot and run the Intcode program on it.  _How many panels does it paint at least once?_
+
+## --- Part Two ---
+
+You're not sure what it's trying to paint, but it's definitely not a  _registration identifier_. The Space Police are getting impatient.
+
+Checking your external ship cameras again, you notice a white panel marked "emergency hull painting robot starting panel". The rest of the panels are  _still black_, but it looks like the robot was expecting to  _start on a white panel_, not a black one.
+
+Based on the  Space Law Space Brochure  that the Space Police attached to one of your windows, a valid registration identifier is always  _eight capital letters_. After starting the robot on a single  _white panel_  instead,  _what registration identifier does it paint_  on your hull?
