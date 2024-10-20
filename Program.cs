@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using AoC19.Day09;
+using System.Diagnostics;
 
 namespace AoC19
 {
@@ -124,8 +125,9 @@ namespace AoC19
         static string day11(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-
-            return "";
+            Day11.Painter painter = new();
+            painter.ParseInput(lines);
+            return painter.Solve(part).ToString();
         }
     }
 }
