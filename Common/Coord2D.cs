@@ -58,6 +58,9 @@
         public int Manhattan(Coord2D other)
             => Math.Abs(x - other.x) + Math.Abs(y - other.y);
 
+        public double DistanceTo(Coord2D other)
+            => (this - other).VectorModule;
+
         public double VectorModule
             => Math.Sqrt( x*x + y*y );
 
