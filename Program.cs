@@ -142,7 +142,9 @@ namespace AoC19
         static string day13(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            return "";
+            Day13.Cabinet cabinet = new();
+            cabinet.ParseInput(lines);
+            return cabinet.Solve(part).ToString();
         }
     }
 }
