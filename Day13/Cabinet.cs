@@ -15,6 +15,15 @@ namespace AoC19.Day13
         public const long AdjustRelBase = 9;
     }
 
+    public static class Blocks
+    {
+        public const long Empty = 0;
+        public const long Wall = 1;
+        public const long Block = 2;
+        public const long Paddle = 3;
+        public const long Ball = 4;
+    }
+
     internal class CabinetTerm
     {
         Dictionary<long, long> IntCodes = new();
@@ -38,6 +47,9 @@ namespace AoC19.Day13
         int PosX = 0;
         int PosY = 0;
 
+        int ballPosX = 0;
+        int paddlePosX = 0;
+
         public void ParseInput(List<string> lines)
         {
             IntCodes.Clear();
@@ -45,6 +57,9 @@ namespace AoC19.Day13
             for (int i = 0; i < nums.Count; i++)
                 IntCodes[i] = nums[i];
         }
+
+        public void WriteMemory(long position, long value)
+            => IntCodes[position] = value;
 
         long GetOperand(long value, long mode)
             => mode switch
@@ -96,18 +111,30 @@ namespace AoC19.Day13
                     IntCodes[op3] = opCode == Instructions.Sum ? op1 + op2 : op1 * op2;
                     break;
                 case Instructions.Input:
-                    IntCodes[op1] = Phase;
+                    int joystick = (paddlePosX > ballPosX) ? -1 : (paddlePosX < ballPosX) ? 1 : 0;
+                    IntCodes[op1] = joystick;
                     increment = 2;
                     break;
                 case Instructions.Output:
-                    LastOutput = op1;
                     if (outputCount % 3 == 0)
                         PosX = (int) op1;
                     if (outputCount % 3 == 1)
                         PosY = (int) op1;
                     if (outputCount % 3 == 2)
-                        Screen[new Coord2D(PosX, PosY)] = (int) op1;
+                    {
+                        if (PosX == -1 && PosY == 0)
+                            LastOutput = op1;
+                        else
+                        {
+                            // We will update the positions depending on the block type
+                            if (op1 == Blocks.Paddle)
+                                paddlePosX = (int)PosX;
+                            if (op1 == Blocks.Ball)
+                                ballPosX = (int)PosX;
 
+                            Screen[new(PosX, PosY)] = (int)op1;
+                        }
+                    }
                     outputCount++;
                     increment = 2;
                     break;
@@ -138,7 +165,9 @@ namespace AoC19.Day13
                     break;
                 Ptr += increment;
             }
-            LastOutput = Screen.Values.Count(x => x == 2);
+            if(part==1)
+                LastOutput = Screen.Values.Count(x => x == 2);
+
             return LastOutput;
         }
     }
@@ -154,6 +183,8 @@ namespace AoC19.Day13
         {
             CabinetTerm term = new();
             term.ParseInput(sourceCode);
+            if (part == 2)
+                term.WriteMemory(0, 2);
             term.RunProgram(part);
             return term.LastOutput;
         }
