@@ -9,9 +9,11 @@ namespace AoC19
             int day = 14;
             int part = 1;
             bool test = !false;
+            int testNum = 5;
 
             string input = "./Input/day" + day.ToString("00");
-            input += (test) ? "_test.txt" : ".txt";
+            
+            input += (test) ? "_test" + (testNum>0 ? testNum.ToString() : "") + ".txt" : ".txt";
 
             Console.WriteLine("AoC 2019 - Day {0} , Part {1} - Test Data {2}", day, part, test);
             Stopwatch st = new();
@@ -151,7 +153,9 @@ namespace AoC19
         static string day14(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            return "";
+            Day14.FuelFactory factory = new();
+            factory.ParseInput(lines);
+            return factory.Solve(part).ToString();
         }
     }
 }
