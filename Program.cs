@@ -34,6 +34,7 @@ namespace AoC19
                 12 => day12(input, part),
                 13 => day13(input, part),
                 14 => day14(input, part),
+                15 => day15(input, part),
                 _ => throw new ArgumentException("Wrong day number - unimplemented")
             };
             st.Stop();
@@ -156,6 +157,12 @@ namespace AoC19
             Day14.FuelFactory factory = new();
             factory.ParseInput(lines);
             return factory.Solve(part).ToString();
+        }
+
+        static string day15(string input, int part)
+        {
+            var lines = File.ReadAllLines(input).ToList();
+            return "";
         }
     }
 }
