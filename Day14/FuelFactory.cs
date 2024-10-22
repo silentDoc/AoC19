@@ -44,13 +44,11 @@
         long FindOreToProduce(string chemicalName, long amount)
         {
             long ore = 0;
-            var targetReaction = Reactions.FirstOrDefault(x => x.Output.Name == chemicalName);
-            if (targetReaction == null)
-                throw new Exception("Can't find a reaction that produces" + chemicalName);
+            var targetReaction = Reactions.First(x => x.Output.Name == chemicalName);
 
             var alreadyAvailable = AvailableElements.ContainsKey(chemicalName) ? AvailableElements[chemicalName] : 0;
             var amountNeeded = amount - alreadyAvailable;
-            var amountNeededOrZero = amountNeeded < 0 ? 0 : amountNeeded;   // We cannot need negatives
+            var amountNeededOrZero = amountNeeded < 0 ? 0 : amountNeeded;   // We may have all what we need already
             
             var numBatches = amountNeededOrZero / targetReaction.Output.Amount;
             if (amountNeededOrZero % targetReaction.Output.Amount > 0)
@@ -69,11 +67,33 @@
             return ore;
         }
 
+        long BurnInventory()
+        {
+            // This is a guess game. A blunt loop would be very inefficient, we have to ask how much ore is required to
+            // produce X fuel, and keep looking for the X that is just below the ore in deck. Binary search ftw
+
+            long oreInCargo = 1000000000000;
+            long minBound = 1;
+            long maxBound = oreInCargo/1000;
+
+            while (maxBound - minBound > 1)
+            {
+                var average = (minBound + maxBound) / 2;
+                var oreNeeded = FindOreToProduce("FUEL", average);
+
+                if (oreNeeded < oreInCargo)
+                    minBound = average;
+                else
+                    maxBound = average;
+            }
+            
+            return minBound;
+        }
+
         public void ParseInput(List<string> lines)
             => lines.ForEach(ParseLine);
 
         public double Solve(int part = 1)
-            => FindOreToProduce("FUEL", 1);
-
+            => part == 1 ? FindOreToProduce("FUEL", 1) : BurnInventory();
     }
 }
