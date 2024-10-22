@@ -8,7 +8,7 @@ namespace AoC19
         {
             int day = 14;
             int part = 1;
-            bool test = !false;
+            bool test = false;
             int testNum = 5;
 
             string input = "./Input/day" + day.ToString("00");
