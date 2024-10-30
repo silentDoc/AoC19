@@ -8,7 +8,7 @@ namespace AoC19
         {
             int day = 16;
             int part = 1;
-            bool test = !false;
+            bool test = false;
             int testNum = 0;
 
             string input = "./Input/day" + day.ToString("00");
@@ -171,7 +171,9 @@ namespace AoC19
         static string day16(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            return "";
+            Day16.FFTCalculator fftCalculator = new();
+            fftCalculator.ParseInput(lines);
+            return fftCalculator.Solve(part).ToString();
         }
     }
 }
