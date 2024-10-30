@@ -1,4 +1,5 @@
 ﻿using AoC19.Common;
+using System.Security.Cryptography;
 
 namespace AoC19.Day17
 {
@@ -39,9 +40,21 @@ namespace AoC19.Day17
             }
         }
 
+        public void PaintMap()
+        {
+            Console.WriteLine("");
+            for (int y = 0; y <= Map.Keys.Max(k => k.y); y++)
+            {
+                var keys = Map.Keys.Where(k => k.y == y).OrderBy(k => k.x).ToList();
+                string line = string.Concat(keys.Select(k => ((char)Map[k]).ToString()));
+                Console.WriteLine(line);
+            }
+        }
+
         public int GetAlignmentValue()
         {
             RetrieveMap();
+            PaintMap();
             var ScaffoldPositions = Map.Keys.Where(x => Map[x] != Tile.Space).ToList();
             int alignmentValue = 0;
 
