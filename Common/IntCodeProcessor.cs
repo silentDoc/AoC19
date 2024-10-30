@@ -30,6 +30,19 @@
         long RelativeBase = 0;
         bool GotOutput = false;
 
+        private bool programEnded = false;
+
+        public bool ProgramEnded()
+        {
+            if (programEnded)
+            {
+                programEnded = false;   // To reuse droid
+                return true;
+            }
+            else return false;
+        }
+             
+
         public void ParseInput(List<string> lines)
         {
             IntCodes.Clear();
@@ -120,7 +133,10 @@
             {
                 var increment = RunOpCode(Ptr, inputDirection);
                 if (increment == EXIT_PROGRAM)
+                {
+                    programEnded = true;
                     break;
+                }
                 Ptr += increment;
                 if (GotOutput)
                     break;
