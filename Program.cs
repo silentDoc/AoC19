@@ -8,7 +8,7 @@ namespace AoC19
         {
             int day = 17;
             int part = 1;
-            bool test = !false;
+            bool test = false;
             int testNum = 0;
 
             string input = "./Input/day" + day.ToString("00");
@@ -180,7 +180,9 @@ namespace AoC19
         static string day17(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            return "";
+            Day17.ScaffoldWalker walker = new();
+            walker.ParseInput(lines);
+            return walker.Solve(part).ToString();
         }
     }
 }
