@@ -47,10 +47,9 @@ namespace AoC19.Day15
                 _ => throw new Exception("Invalid direction")
             };
 
-        public void TraverseMap(List<Coord2D> boundaryPositions)
+        public void TraverseMap(List<Coord2D> boundaryPositions, int part = 1)
         {
             // Discovers the map from center until it finds oxygen
-
             List<Coord2D> newBoundaries = new();
             foreach (var position in boundaryPositions)
             {
@@ -88,37 +87,55 @@ namespace AoC19.Day15
             }
 
             newBoundaries = newBoundaries.Distinct().ToList();
-            if (!Map.ContainsValue(Tile.Oxygen))
-                TraverseMap(newBoundaries);
+
+            var condition = part == 1 ? !Map.ContainsValue(Tile.Oxygen) : newBoundaries.Count > 0;
+            if (condition)
+                TraverseMap(newBoundaries, part);
         }
 
-        public void DiscoverMap()
+        int ExpandOxygen()
+        {
+            int count = 0;
+            while (true)
+            {
+                var oxyPositions = Map.Keys.Where(x => Map[x] == Tile.Oxygen);
+                var expansion = oxyPositions.SelectMany(x => x.GetNeighbors().Where(y => Map[y] == Tile.Floor)).ToList();
+
+                if (expansion.Count == 0)   // No more space to fill with oxygen
+                    break;
+
+                expansion.ForEach(x => Map[x] = Tile.Oxygen); 
+                count++;
+            }
+            return count;
+        }
+
+        public void DiscoverMap(int part =1)
         {
             Map[StartPos] = Tile.Floor;
             DirectionsFromCenter[StartPos] = new List<int>();
-            TraverseMap([StartPos]);
+            TraverseMap([StartPos], part);
         }
 
-        public int FindOxygen()
+        public int FindOxygen(int part =1)
         {
-            DiscoverMap();
+            DiscoverMap(part);
             var posOxygen = Map.Keys.Where(x => Map[x] == Tile.Oxygen).First();
-            return DirectionsFromCenter[posOxygen].Count();
+            return part ==1 ? DirectionsFromCenter[posOxygen].Count() : ExpandOxygen();
         }
     }
 
     internal class OxygenFinder
     {
         List<string> sourceCode = new();
-        FinderOperator OxygenOp;
 
         public void ParseInput(List<string> lines)
             => sourceCode = lines;
 
         long FindOxygen(int part = 1)
         {
-            OxygenOp = new(sourceCode);
-            int steps = OxygenOp.FindOxygen();
+            FinderOperator OxygenOp = new(sourceCode);
+            int steps = OxygenOp.FindOxygen(part);
             return steps;
         }
 
