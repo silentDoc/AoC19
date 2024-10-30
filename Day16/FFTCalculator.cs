@@ -39,6 +39,32 @@
 
             return string.Concat(localInput.Select(x => x.ToString()));
         }
+
+        public string ProcessPart2(int numPhases) 
+        {
+            // We go for arrays instead of lists - faster
+            var newLength = input.Count * 10000;
+            var nums = new int[newLength];
+            for (var i = 0; i < newLength; i++)
+                nums[i] = input[i % input.Count];
+
+            var offsetStr = string.Concat(nums[..7].Select(x => x.ToString()));
+            var offset = int.Parse(offsetStr);
+
+            // Let's analyze what we're asked. 
+            // First, our new signal length will be 650*10000 = 6.500.000 positions
+            // Our offset is the first 7 positions --> 59766299, well beyond half the 
+            // This means that our digits of interest factors will be all 1s
+            
+            // We can work out only the digits that are after the offset, and if we reverse the loop, we can use
+            // the previous operation to decide the current value. 
+
+            for (var phase =0; phase<numPhases; phase++)
+                for (var i = nums.Length - 2; i >= offset; i--)
+                    nums[i] = (nums[i] + nums[i + 1]) % 10;
+
+            return string.Join("", nums.Skip(offset).Take(8));
+        }
     }
 
     class FFTCalculator
@@ -48,13 +74,13 @@
         public void ParseInput(List<string> lines)
             => input = lines[0];
 
-        string CalculatePhases(int numPhases)
+        string CalculatePhases(int part = 1)
         {
             FFTProcessor proc = new(input);
-            return proc.Process(100);
+            return part == 1 ? proc.Process(100) : proc.ProcessPart2(100); 
         }
 
         public string Solve(int part = 1)
-            => CalculatePhases(1);
+            => CalculatePhases(part);
     }
 }
