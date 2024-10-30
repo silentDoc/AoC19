@@ -6,8 +6,8 @@ namespace AoC19
     {
         static void Main(string[] args)
         {
-            int day = 14;
-            int part = 2;
+            int day = 15;
+            int part = 1;
             bool test = false;
             int testNum = 0;
 
@@ -162,7 +162,9 @@ namespace AoC19
         static string day15(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            return "";
+            Day15.OxygenFinder oxygenFinder = new();
+            oxygenFinder.ParseInput(lines);
+            return oxygenFinder.Solve(part).ToString();
         }
     }
 }
