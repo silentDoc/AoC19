@@ -1,5 +1,4 @@
 ﻿using AoC19.Common;
-using System.Security.Cryptography;
 
 namespace AoC19.Day17
 {
@@ -54,18 +53,12 @@ namespace AoC19.Day17
         public int GetAlignmentValue()
         {
             RetrieveMap();
-            PaintMap();
-            var ScaffoldPositions = Map.Keys.Where(x => Map[x] != Tile.Space).ToList();
-            int alignmentValue = 0;
-
-            // Find crossings
-            foreach (var pos in ScaffoldPositions)
-            { 
-                var neighbors = pos.GetNeighbors().Where(x => Map.ContainsKey(x)).ToList();
-                if (neighbors.All(x => Map[x] == Tile.Scaffold))
-                    alignmentValue += pos.x * pos.y;
-            }
-            return alignmentValue;
+            
+            // Find crossings - the positions where all neighbors are scaffold positions (4 connectivity)
+            var scaffoldPositions = Map.Keys.Where(x => Map[x] != Tile.Space).ToList();
+            var crossings = scaffoldPositions.Where(x => x.GetNeighbors().All(y => scaffoldPositions.Contains(y))).ToList();
+            
+            return crossings.Sum(k => k.x * k.y);
         }
     }
 
