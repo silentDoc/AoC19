@@ -41,7 +41,9 @@
             }
             else return false;
         }
-             
+
+        public void PatchMemory(int position, int newValue)
+            => IntCodes[position] = newValue;
 
         public void ParseInput(List<string> lines)
         {
