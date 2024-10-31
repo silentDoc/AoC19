@@ -6,9 +6,9 @@ namespace AoC19
     {
         static void Main(string[] args)
         {
-            int day = 18;
-            int part = 2;
-            bool test = false;
+            int day = 19;
+            int part = 1;
+            bool test = !false;
             int testNum = 0;
 
             string input = "./Input/day" + day.ToString("00");
@@ -192,6 +192,12 @@ namespace AoC19
             Day18.MazeRunner runner = new();
             runner.ParseInput(lines);
             return runner.Solve(part).ToString();
+        }
+
+        static string day19(string input, int part)
+        {
+            var lines = File.ReadAllLines(input).ToList();
+            return "";
         }
     }
 }
