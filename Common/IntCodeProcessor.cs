@@ -18,6 +18,7 @@
     public class IntCodeProcessor
     {
         Dictionary<long, long> IntCodes = new();
+        Dictionary<long, long> ResetIntCodes = new();
         List<long> OneParamInstructions = new() { Instructions.Input, Instructions.Output, Instructions.AdjustRelBase };
         List<long> TwoParamInstructions = new() { Instructions.JumpNonZero, Instructions.JumpZero };
 
@@ -57,6 +58,9 @@
             RelativeBase = 0;
             GotOutput = false;
             programEnded = false;
+            IntCodes.Clear();
+            foreach (var k in ResetIntCodes.Keys)
+                IntCodes[k] = ResetIntCodes[k];
         }
 
         public void ParseInput(List<string> lines)
@@ -65,6 +69,9 @@
             var nums = lines[0].Split(",").Select(long.Parse).ToList();
             for (int i = 0; i < nums.Count; i++)
                 IntCodes[i] = nums[i];
+
+            foreach (var k in IntCodes.Keys)
+                ResetIntCodes[k] = IntCodes[k];
         }
 
         long GetOperand(long value, long mode)
