@@ -59,6 +59,7 @@
             GotOutput = false;
             programEnded = false;
             IntCodes.Clear();
+            inputBuffer.Clear();
             foreach (var k in ResetIntCodes.Keys)
                 IntCodes[k] = ResetIntCodes[k];
         }

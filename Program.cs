@@ -38,6 +38,7 @@ namespace AoC19
                 16 => day16(input, part),
                 17 => day17(input, part),
                 18 => day18(input, part),
+                19 => day19(input, part),
                 _ => throw new ArgumentException("Wrong day number - unimplemented")
             };
             st.Stop();
@@ -197,7 +198,9 @@ namespace AoC19
         static string day19(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            return "";
+            Day19.BeamChecker checker = new();
+            checker.ParseInput(lines);
+            return checker.Solve(part).ToString();
         }
     }
 }
