@@ -45,6 +45,15 @@
         public void PatchMemory(int position, int newValue)
             => IntCodes[position] = newValue;
 
+        public void ResetProgram()
+        {
+            Ptr = 0;    // Instruction pointer
+            LastOutput = 0;      
+            RelativeBase = 0;
+            GotOutput = false;
+            programEnded = false;
+        }
+
         public void ParseInput(List<string> lines)
         {
             IntCodes.Clear();
