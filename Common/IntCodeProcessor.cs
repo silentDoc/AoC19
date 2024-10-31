@@ -21,6 +21,8 @@
         List<long> OneParamInstructions = new() { Instructions.Input, Instructions.Output, Instructions.AdjustRelBase };
         List<long> TwoParamInstructions = new() { Instructions.JumpNonZero, Instructions.JumpZero };
 
+        public Queue<int> inputBuffer = new Queue<int>();
+
         long Ptr = 0;    // Instruction pointer
 
         public long LastOutput = 0;
@@ -44,6 +46,9 @@
 
         public void PatchMemory(int position, int newValue)
             => IntCodes[position] = newValue;
+
+        public void AddInputToQueue(int input)
+            => inputBuffer.Enqueue(input);
 
         public void ResetProgram()
         {
@@ -112,7 +117,10 @@
                     IntCodes[op3] = opCode == Instructions.Sum ? op1 + op2 : op1 * op2;
                     break;
                 case Instructions.Input:
-                    IntCodes[op1] = inputDirection;
+                    if(inputBuffer.Count >0)
+                        IntCodes[op1] = inputBuffer.Dequeue();
+                    else
+                        IntCodes[op1] = inputDirection;
                     increment = 2;
                     break;
                 case Instructions.Output:
@@ -145,11 +153,12 @@
                 var increment = RunOpCode(Ptr, inputDirection);
                 if (increment == EXIT_PROGRAM)
                 {
+                    Console.WriteLine("Exit program");
                     programEnded = true;
                     break;
                 }
                 Ptr += increment;
-                if (GotOutput)
+                if (GotOutput && inputBuffer.Count==0)
                     break;
             }
             GotOutput = false;
