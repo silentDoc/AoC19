@@ -34,7 +34,7 @@ namespace AoC19.Day19
 
         // For a given row, we find x0 and x1 being the start and end x coords
         // of the tractor beam activity zone. Also doing binary search
-        (int x0, int x1) CheckLine(int y)
+        (int x0, int x1) GetBeamInRow(int y)
         {
             var xLow = 0;
             var xHigh = y/2;
@@ -75,7 +75,7 @@ namespace AoC19.Day19
             {
                 
                 var avg = (y_high + y_low) / 2;
-                (_, x1) = CheckLine(avg);
+                (_, x1) = GetBeamInRow(avg);
                 var squareFits = CheckSquare(x1 - 99, avg, 99);
                 y_high = squareFits ? avg : y_high;
                 y_low = squareFits ? y_low : avg;
