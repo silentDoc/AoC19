@@ -6,9 +6,9 @@ namespace AoC19
     {
         static void Main(string[] args)
         {
-            int day = 20;
-            int part = 2;
-            bool test = false;
+            int day = 21;
+            int part = 1;
+            bool test = !false;
             int testNum = 1;
 
             string input = "./Input/day" + day.ToString("00");
@@ -40,6 +40,7 @@ namespace AoC19
                 18 => day18(input, part),
                 19 => day19(input, part),
                 20 => day20(input, part),
+                21 => day21(input, part),
                 _ => throw new ArgumentException("Wrong day number - unimplemented")
             };
             st.Stop();
@@ -210,6 +211,12 @@ namespace AoC19
             Day20.DonutMazeRunner runner = new();
             runner.ParseInput(lines);
             return runner.Solve(part).ToString();
+        }
+
+        static string day21(string input, int part)
+        {
+            var lines = File.ReadAllLines(input).ToList();
+            return "";
         }
     }
 }
