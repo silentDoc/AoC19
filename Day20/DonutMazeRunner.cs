@@ -9,9 +9,16 @@ namespace AoC19.Day20
         HashSet<Coord2D> LetterPositions = new();
         HashSet<Coord2D> WallPositions = new();
         Dictionary<Coord2D, string> warpPositions = new();
+        
+        // Part 2
+        HashSet<Coord2D> outerWarpPositions = new();
+        HashSet<Coord2D> innerWarpPositions = new();
 
         Coord2D startPosition = (0, 0);
         Coord2D endPosition = (0, 0);
+
+        HashSet<Coord2D> Lvl0Warp = new();
+        HashSet<Coord2D> Lvl1Warp = new();
 
         // Transform open space to walls
         void ParseLine(string line, int row)
@@ -36,31 +43,39 @@ namespace AoC19.Day20
 
             // Retrieve the warp cells into a dictionary
             foreach (var position in horizontalWarpPositionsRight)
-            {
-                var label = string.Concat(Map[position - (2, 0)], Map[position - (1, 0)]);
-                warpPositions[position] = label;
-            }
+                warpPositions[position] = string.Concat(Map[position - (2, 0)], Map[position - (1, 0)]);
 
             foreach (var position in horizontalWarpPositionsLeft)
-            {
-                var label = string.Concat(Map[position + (1, 0)], Map[position + (2, 0)]);
-                warpPositions[position] = label;
-            }
+                warpPositions[position] = string.Concat(Map[position + (1, 0)], Map[position + (2, 0)]);
 
             foreach (var position in verticaWarpPositionsUp)
-            {
-                var label = string.Concat(Map[position + (0, 1)], Map[position + (0, 2)]);
-                warpPositions[position] = label;
-            }
+                warpPositions[position] = string.Concat(Map[position + (0, 1)], Map[position + (0, 2)]);
 
             foreach (var position in verticaWarpPositionsDown)
-            {
-                var label = string.Concat(Map[position - (0, 2)], Map[position - (0, 1)]);
-                warpPositions[position] = label;
-            }
+                warpPositions[position] = string.Concat(Map[position - (0, 2)], Map[position - (0, 1)]);
 
             startPosition = warpPositions.Keys.Where(x => warpPositions[x] == "AA").First();
             endPosition = warpPositions.Keys.Where(x => warpPositions[x] == "ZZ").First();
+
+            // Part 2
+            Coord2D center = new Coord2D(Map.Keys.Max(p => p.x) / 2, Map.Keys.Max(p => p.y) / 2);
+            var listOfWarpPoints = warpPositions.Values.Where(x => x!="AA" && x!="ZZ").Distinct();
+            foreach (var label in listOfWarpPoints)
+            {
+                var positions = warpPositions.Keys.Where(x => warpPositions[x] == label).ToList();
+                positions = positions.OrderBy(x => (x - center).VectorModule).ToList();
+                innerWarpPositions.Add(positions[0]);
+                outerWarpPositions.Add(positions[1]);
+            }
+
+            LetterPositions.ToList().ForEach(x => WallPositions.Add(x));
+
+            foreach (var pos in outerWarpPositions)
+                if (pos != startPosition && pos != endPosition)
+                    Lvl1Warp.Add(pos);
+
+            Lvl0Warp.Add(startPosition);
+            Lvl0Warp.Add(endPosition);
         }
 
         List<Coord2D> GetNeighbors(Coord2D position)
@@ -101,6 +116,56 @@ namespace AoC19.Day20
             }
             return -1;
         }
+
+        // Part 2
+        List<Coord2D> GetNeighborsPart2(Coord2D position, int level)
+        {
+            var retValue = position.GetNeighbors().Where(x => Map.ContainsKey(x) && !WallPositions.Contains(x)).ToList();
+            if (warpPositions.ContainsKey(position))
+                retValue.AddRange(warpPositions.Keys.Where(x => warpPositions[x] == warpPositions[position] && x != position));
+
+            if (level == 0 && retValue.Any(Lvl1Warp.Contains) && retValue.All(p => (position - p).VectorModule == 1))
+                retValue = retValue.Where(x => !Lvl1Warp.Contains(x)).ToList();
+            else if (level > 0 && retValue.Any(Lvl0Warp.Contains) && retValue.All(p => (position - p).VectorModule == 1))
+                retValue = retValue.Where(x => !Lvl0Warp.Contains(x)).ToList();
+
+            return retValue;
+        }
+
+        public int FindShortestPathPart2()
+        {
+            var visited = new Dictionary<(Coord2D, int), int>();
+            var activeQueue = new Queue<(Coord2D,  int)>();
+            var startPos = startPosition;
+
+            activeQueue.Enqueue((startPos, 0));
+            visited[(startPos,0)] = 0;
+
+            while (activeQueue.Count > 0)
+            {
+                var (currentPos, currentLevel) = activeQueue.Dequeue();
+                var cost = visited[(currentPos, currentLevel)];
+
+                if (currentPos == endPosition && currentLevel == 0)
+                    return cost;
+
+                var neighbors = GetNeighborsPart2(currentPos, currentLevel).ToList();
+                
+                foreach (var neighbor in neighbors)
+                {
+                    var neighborLevel = currentLevel;
+                    if ((neighbor - currentPos).VectorModule > 1)    // We have a warp
+                        neighborLevel += innerWarpPositions.Contains(neighbor) ? -1 : 1;
+
+                    if (visited.ContainsKey((neighbor, neighborLevel)))
+                        continue;
+
+                    activeQueue.Enqueue((neighbor, neighborLevel));
+                    visited[(neighbor, neighborLevel)] = cost + 1;
+                }
+            }
+            return -1;
+        }
     }
 
     internal class DonutMazeRunner
@@ -114,7 +179,7 @@ namespace AoC19.Day20
         public int FindShortestPath(int part = 1)
         {
             mazeSolver.LoadMap(inputMap);
-            return mazeSolver.FindShortestPath();
+            return part==1 ? mazeSolver.FindShortestPath() : mazeSolver.FindShortestPathPart2();
         }
 
         public long Solve(int part = 1)
