@@ -41,6 +41,7 @@ namespace AoC19
                 19 => day19(input, part),
                 20 => day20(input, part),
                 21 => day21(input, part),
+                22 => day22(input, part),
                 _ => throw new ArgumentException("Wrong day number - unimplemented")
             };
             st.Stop();
@@ -219,6 +220,12 @@ namespace AoC19
             Day21.HullInspector inspector = new();
             inspector.ParseInput(lines);
             return inspector.Solve(part).ToString();
+        }
+
+        static string day22(string input, int part)
+        {
+            var lines = File.ReadAllLines(input).ToList();
+            return "";
         }
     }
 }
