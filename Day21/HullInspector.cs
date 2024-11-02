@@ -23,17 +23,34 @@ namespace AoC19.Day21
     }
     internal class HullInspector
     {
-        List<string> asm = [
-            // Jump if D is safe and hole at B or C
+        List<string> asm_p1 = [
+            // Jump if (hole at B or C) AND (D is safe)
             "NOT B J\n",
             "NOT C T\n",
             "OR T J\n",
             "AND D J\n",
-            // Jump if A is hole
+            // Jump if (A is hole)
             "NOT A T\n",
             "OR T J\n",
             // walk
             "WALK\n"];
+
+        // Part 2 is the same, all the extra registers are not needed because when you jump
+        // they will become ABCD. H is the only one, as 4+4 is the range of 2 jumps, so what we want to do
+        // is wait until last moment to jump.
+        List<string> asm_p2 = [
+            // Jump if (hole at B or C) AND (D is safe)
+            "NOT B J\n",
+            "NOT C T\n",
+            "OR T J\n",
+            "AND D J\n",
+            // Part 2 - (H has to be safe as well)
+            "AND H J\n",
+            // Jump if A is hole - always
+            "NOT A T\n",
+            "OR T J\n",
+            // Part 2 - Run instead of walk
+            "RUN\n"];
 
         List<string> sourceCode = new();
 
@@ -44,7 +61,7 @@ namespace AoC19.Day21
         {
             HullRobot hullRobot = new(sourceCode);
             
-            hullRobot.LoadInstructions(asm);
+            hullRobot.LoadInstructions(part == 1? asm_p1 : asm_p2);
             return hullRobot.GetDamage();
         }
 
