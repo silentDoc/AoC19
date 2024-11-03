@@ -7,7 +7,7 @@ namespace AoC19
         static void Main(string[] args)
         {
             int day = 22;
-            int part = 1;
+            int part = 2;
             bool test = false;
             int testNum = 4;
 
