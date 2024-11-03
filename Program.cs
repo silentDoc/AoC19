@@ -6,10 +6,10 @@ namespace AoC19
     {
         static void Main(string[] args)
         {
-            int day = 21;
-            int part = 2;
+            int day = 22;
+            int part = 1;
             bool test = false;
-            int testNum = 1;
+            int testNum = 4;
 
             string input = "./Input/day" + day.ToString("00");
             
@@ -225,7 +225,9 @@ namespace AoC19
         static string day22(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            return "";
+            Day22.SpaceCards cards = new();
+            cards.ParseInput(lines);
+            return cards.Solve(part).ToString();
         }
     }
 }
