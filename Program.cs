@@ -6,10 +6,10 @@ namespace AoC19
     {
         static void Main(string[] args)
         {
-            int day = 22;
-            int part = 2;
-            bool test = false;
-            int testNum = 4;
+            int day = 23;
+            int part = 1;
+            bool test = !false;
+            int testNum = 0;
 
             string input = "./Input/day" + day.ToString("00");
             
@@ -42,6 +42,7 @@ namespace AoC19
                 20 => day20(input, part),
                 21 => day21(input, part),
                 22 => day22(input, part),
+                23 => day23(input, part),
                 _ => throw new ArgumentException("Wrong day number - unimplemented")
             };
             st.Stop();
@@ -228,6 +229,12 @@ namespace AoC19
             Day22.SpaceCards cards = new();
             cards.ParseInput(lines);
             return cards.Solve(part).ToString();
+        }
+
+        static string day23(string input, int part)
+        {
+            var lines = File.ReadAllLines(input).ToList();
+            return "";
         }
     }
 }
