@@ -32,7 +32,7 @@ namespace AoC19.Day13
         List<long> TwoParamInstructions = new() { Instructions.JumpNonZero, Instructions.JumpZero };
 
         long Ptr = 0;    // Instruction pointer
-        int Phase = 0;
+        
 
         public long LastOutput = 0;
         const long EXIT_PROGRAM = long.MinValue;
