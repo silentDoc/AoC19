@@ -234,7 +234,9 @@ namespace AoC19
         static string day23(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            return "";
+            Day23.NetworkFixer fixer = new();
+            fixer.ParseInput(lines);
+            return fixer.Solve(part).ToString();
         }
     }
 }
