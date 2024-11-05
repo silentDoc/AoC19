@@ -1,5 +1,4 @@
 ﻿using AoC19.Common;
-using System.Diagnostics;
 
 namespace AoC19.Day23
 {

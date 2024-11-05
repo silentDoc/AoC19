@@ -8,7 +8,7 @@ namespace AoC19
         {
             int day = 24;
             int part = 1;
-            bool test = !false;
+            bool test = false;
             int testNum = 0;
 
             string input = "./Input/day" + day.ToString("00");
@@ -243,7 +243,9 @@ namespace AoC19
         static string day24(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            return "";
+            Day24.BugPlanet planet = new();
+            planet.ParseInput(lines);
+            return planet.Solve(part).ToString();
         }
     }
 }
