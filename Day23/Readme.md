@@ -15,3 +15,15 @@ To  _receive_  a packet from another computer, the NIC will use an  _input instr
 Note that these input and output instructions never  [block](https://en.wikipedia.org/wiki/Blocking_(computing)). Specifically, output instructions do not wait for the sent packet to be received - the computer might send multiple packets before receiving any. Similarly, input instructions do not wait for a packet to arrive - if no packet is waiting, input instructions should receive  `-1`.
 
 Boot up all  `50`  computers and attach them to your network.  _What is the  `Y`  value of the first packet sent to address  `255`?_
+
+## --- Part Two ---
+
+Packets sent to address  `255`  are handled by a device called a NAT (Not Always Transmitting). The NAT is responsible for managing power consumption of the network by blocking certain packets and watching for idle periods in the computers.
+
+If a packet would be sent to address  `255`, the NAT receives it instead. The NAT remembers only the  _last_  packet it receives; that is, the data in each packet it receives overwrites the NAT's packet memory with the new packet's  `X`  and  `Y`  values.
+
+The NAT also monitors all computers on the network. If all computers have  _empty incoming packet queues_  and are  _continuously trying to receive packets_  without sending packets, the network is considered  _idle_.
+
+Once the network is idle, the NAT sends  _only the last packet it received_  to address  `0`; this will cause the computers on the network to resume activity. In this way, the NAT can throttle power consumption of the network when the ship needs power in other areas.
+
+Monitor packets released to the computer at address  `0`  by the NAT.  _What is the first  `Y`  value delivered by the NAT to the computer at address  `0`  twice in a row?_
