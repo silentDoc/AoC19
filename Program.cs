@@ -252,7 +252,10 @@ namespace AoC19
         static string day25(string input, int part)
         {
             var lines = File.ReadAllLines(input).ToList();
-            return "";
+            Day25.ShipExplorer shipExplorer = new();    
+            shipExplorer.ParseInput(lines);
+
+            return shipExplorer.Solve(part).ToString();
         }
     }
 }

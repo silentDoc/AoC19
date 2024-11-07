@@ -1,4 +1,6 @@
-﻿namespace AoC19.Common
+﻿using System.Diagnostics;
+
+namespace AoC19.Common
 {
     // Class to handle day 23 - I'm kind of sick of the intcode computer, but this is proof that it pays of to tidy up classes and make them
     // ready to reuse them
