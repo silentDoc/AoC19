@@ -43,6 +43,24 @@ namespace AoC19.Day25
             return retVal;
         }
 
+        private void EnterCommand(string input)
+        {
+            var listInputs = input.Select(Convert.ToInt64).Append('\n').ToArray();
+            foreach (var inp in listInputs)
+                droid.AddInputToQueue(inp);
+        }
+
+        private string GetOutput()
+        {
+            StringBuilder sb = new("");
+            while (droid.outputBuffer.Count != 0)
+            {
+                var outChar = (char)((int)droid.outputBuffer.Dequeue());
+                sb.Append(outChar.ToString());
+            }
+            return sb.ToString();
+        }
+
         private void Play()
         {
             // Automation commands to navigate the map and take the elements - manually explored
@@ -54,15 +72,8 @@ namespace AoC19.Day25
             while (!foundAll)
             {
                 droid.RunProgram();
-                StringBuilder sb = new("");
-                while (droid.outputBuffer.Count != 0)
-                {
-                    var outChar = (char)((int) droid.outputBuffer.Dequeue());
-                    sb.Append(outChar.ToString());
-                }
-
-                
-                Console.WriteLine(sb.ToString());
+                var output = GetOutput();
+                Console.WriteLine(output);
 
                 string input = (cachedCommand < commands.Count) ? commands[cachedCommand] : Console.ReadLine();
                 cachedCommand++;
@@ -70,10 +81,7 @@ namespace AoC19.Day25
                 if (cachedCommand == commands.Count)
                     foundAll = true;
 
-                var listInputs = input.Select(Convert.ToInt64).Append('\n').ToArray();
-
-                foreach(var inp in listInputs)
-                    droid.AddInputToQueue(inp);
+                EnterCommand(input);
             }
 
             // Second part, find combinations
@@ -83,22 +91,17 @@ namespace AoC19.Day25
             for (int i = 0; i < objects.Count; i++)
             {
                 var input = "drop " + objects[i];
-                var listInputs = input.Select(Convert.ToInt64).Append('\n').ToArray();
-                foreach (var inp in listInputs)
-                    droid.AddInputToQueue(inp);
+                EnterCommand(input);
                 droid.RunProgram();
-                StringBuilder sb = new("");
-                while (droid.outputBuffer.Count != 0)
-                {
-                    var outChar = (char)((int)droid.outputBuffer.Dequeue());
-                    sb.Append(outChar.ToString());
-                }
-                Console.WriteLine(sb.ToString());
+                var output = GetOutput();
             }
 
             var numElements = 0;
             var entered = false;
 
+            string response = "";
+
+            // Bruteforce all combinations. Only the console output when we get in
             while (!entered)
             {
                 numElements++;
@@ -118,33 +121,16 @@ namespace AoC19.Day25
                     for (int i = 0; i < takeItemsCommand.Count; i++)
                     {
                         var input2 = takeItemsCommand[i];
-                        var listInputs2 = input2.Select(Convert.ToInt64).Append('\n').ToArray();
-                        foreach (var inp in listInputs2)
-                            droid.AddInputToQueue(inp);
+                        EnterCommand(input2);
                         droid.RunProgram();
-                        StringBuilder sb2 = new("");
-                        while (droid.outputBuffer.Count != 0)
-                        {
-                            var outChar = (char)((int)droid.outputBuffer.Dequeue());
-                            sb2.Append(outChar.ToString());
-                        }
-                        Console.WriteLine(sb2.ToString());
+                        var out1 = GetOutput();
                     }
 
                     // Attempt to go north
                     var input = "north";
-                    var listInputs = input.Select(Convert.ToInt64).Append('\n').ToArray();
-                    foreach (var inp in listInputs)
-                        droid.AddInputToQueue(inp);
+                    EnterCommand(input);
                     droid.RunProgram();
-                    StringBuilder sb = new("");
-                    while (droid.outputBuffer.Count != 0)
-                    {
-                        var outChar = (char)((int)droid.outputBuffer.Dequeue());
-                        sb.Append(outChar.ToString());
-                    }
-                    var response = sb.ToString();
-                    Console.WriteLine(response);
+                    response = GetOutput();
 
                     entered = response.IndexOf("heavier") == -1 && response.IndexOf("lighter") == -1;
                     if (entered)
@@ -153,21 +139,14 @@ namespace AoC19.Day25
                     // Drop items
                     for (int i = 0; i < dropItemsCommand.Count; i++)
                     {
-                        var input3 = dropItemsCommand[i];
-                        var listInputs3 = input3.Select(Convert.ToInt64).Append('\n').ToArray();
-                        foreach (var inp in listInputs3)
-                            droid.AddInputToQueue(inp);
+                        var input2 = dropItemsCommand[i];
+                        EnterCommand(input2);
                         droid.RunProgram();
-                        StringBuilder sb3 = new("");
-                        while (droid.outputBuffer.Count != 0)
-                        {
-                            var outChar = (char)((int)droid.outputBuffer.Dequeue());
-                            sb3.Append(outChar.ToString());
-                        }
-                        Console.WriteLine(sb3.ToString());
+                        var out1 = GetOutput();
                     }
                 }
             }
+            Console.WriteLine(response);
         }
 
         public long SolvePart1()
