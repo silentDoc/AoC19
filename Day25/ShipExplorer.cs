@@ -168,8 +168,6 @@ namespace AoC19.Day25
                     }
                 }
             }
-
-            
         }
 
         public long SolvePart1()
