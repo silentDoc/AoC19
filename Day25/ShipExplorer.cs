@@ -34,10 +34,9 @@ namespace AoC19.Day25
                 List<string> combination = new();
 
                 for (int bit = 0; bit < objects.Count; bit++)
-                {
                     if(b[bit])
                         combination.Add(objects[bit]);
-                }
+
                 retVal.Add(combination);
             }
             return retVal;
@@ -66,25 +65,16 @@ namespace AoC19.Day25
             // Automation commands to navigate the map and take the elements - manually explored
             List<string> commands = ["west", "take fixed point", "north", "take sand", "south", "east", "east", "take asterisk", "north", "north", "take hypercube", "north",
                                      "take coin", "north", "take easter egg", "south", "south","south","west", "north", "take spool of cat6", "north", "take shell", "west" ];
-            int cachedCommand = 0;
-            var foundAll = false;
 
-            while (!foundAll)
+            foreach(var input in commands)
             {
                 droid.RunProgram();
                 var output = GetOutput();
                 Console.WriteLine(output);
-
-                string input = (cachedCommand < commands.Count) ? commands[cachedCommand] : Console.ReadLine();
-                cachedCommand++;
-
-                if (cachedCommand == commands.Count)
-                    foundAll = true;
-
                 EnterCommand(input);
             }
 
-            // Second part, find combinations
+            // Second part, find combinations - The objects have been manually checked, only picking the ones that do not kill you
             List<string> objects = ["easter egg", "sand", "fixed point", "coin", "spool of cat6", "shell", "hypercube", "asterisk"];
 
             // Before bruteforcing, we drop everything
@@ -98,7 +88,6 @@ namespace AoC19.Day25
 
             var numElements = 0;
             var entered = false;
-
             string response = "";
 
             // Bruteforce all combinations. Only the console output when we get in
@@ -154,11 +143,8 @@ namespace AoC19.Day25
             Play();
             return 1;
         }
-        
-
-        public long SolvePart2()
-            => 2;
     }
+
     internal class ShipExplorer
     {
         ShipRobot robot = new();
@@ -167,6 +153,6 @@ namespace AoC19.Day25
             => robot.StartUp(lines);
 
         public long Solve(int part = 1)
-            => part == 1 ? robot.SolvePart1() : robot.SolvePart2();
+            => robot.SolvePart1();
     }
 }
